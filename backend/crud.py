@@ -22,7 +22,7 @@ def create_car(car: Car) -> int:
             INSERT INTO cars 
             (brand, model, body_type, year, fuel_type, transmission, price, status, 
             image1, image2, image3, image4, image5, image6, image7, image8) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 car.brand, car.model, car.body_type, car.year, car.fuel_type,
@@ -32,14 +32,16 @@ def create_car(car: Car) -> int:
             )
         )
         conn.commit()
-        return cursor.lastrowid
+        car_id = cursor.lastrowid
+        if car_id == 0:
+            raise Exception("Failed to retrieve the generated car ID.")
+        return car_id
     except Exception as e:
-        conn.rollback()
-        print(f"Ошибка при добавлении машины: {e}")
-        return -1
+        conn.rollback()  # Ensure rollback on error
+        print(f"Error inserting car: {e}")  # Log the error
+        return -1  # Return a default error value or handle as needed
     finally:
-        conn.close()
-
+        conn.close()  # Закрытие соединения
 
 def get_all_cars():
     """Получение списка всех машин."""

@@ -22,6 +22,12 @@ if not os.path.exists("static/images"):
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
+def save_image(file: UploadFile):
+    path = f"static/images/{file.filename}"
+    with open(path, "wb") as buffer:
+        buffer.write(file.file.read())
+    return path
+
 @app.post("/cars/")
 async def create_car(
     brand: str = Form(...),
@@ -41,13 +47,6 @@ async def create_car(
     image7: UploadFile = File(...),
     image8: UploadFile = File(...),
 ):
-    # Функция для сохранения изображения
-    def save_image(file: UploadFile):
-        path = f"static/images/{file.filename}"
-        with open(path, "wb") as buffer:
-            buffer.write(file.file.read())
-        return path
-
     # Сохраняем изображения
     image_paths = [save_image(img) for img in [image1, image2, image3, image4, image5, image6, image7, image8]]
 
@@ -73,9 +72,8 @@ async def create_car(
 
     car_id = crud.create_car(car)
     if car_id == -1:
-        raise HTTPException(status_code=500, detail="Ошибка при создании автомобиля")
-
-    return {"message": "Машина успешно добавлена!", "car_id": car_id}
+        return {"message": "Error creating car."}
+    return {"message": "Car created successfully!"}
 
 
 @app.get("/cars/")

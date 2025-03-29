@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE_FILE = "cars.db"
+DATABASE_FILE = "backend/cars.db"
 
 def get_connection():
     conn = sqlite3.connect(DATABASE_FILE)
