@@ -27,3 +27,4 @@ class Car(CarBase):
 
     class Config:
         from_attributes = True
+        
