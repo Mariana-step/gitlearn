@@ -37,11 +37,11 @@ def create_car(car: Car) -> int:
             raise Exception("Failed to retrieve the generated car ID.")
         return car_id
     except Exception as e:
-        conn.rollback()  # Ensure rollback on error
-        print(f"Error inserting car: {e}")  # Log the error
-        return -1  # Return a default error value or handle as needed
+        conn.rollback()  
+        print(f"Error inserting car: {e}")  
+        return -1  
     finally:
-        conn.close()  # Закрытие соединения
+        conn.close()  
 
 def get_all_cars():
     """Получение списка всех машин."""
