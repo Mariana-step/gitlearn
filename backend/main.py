@@ -95,7 +95,10 @@ def get_car(car_id: int):
 async def get_brands_list():
     # Получаем список брендов
     brands = crud.get_brands()
-    return [{"name": brand} for brand in brands]
+    return [
+        {"name": brand, "logo": f"/static/logos/{brand.lower()}.png"} 
+        for brand in brands
+    ]
 
 @app.get("/brands/{brand_name}/cars")
 async def get_cars_for_brand(brand_name: str):
