@@ -63,6 +63,23 @@ def get_car_by_id(car_id: int):
     return car
 
 
+def get_brands():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT brand FROM cars")
+    brands = cursor.fetchall()
+    conn.close()
+    return [brand[0] for brand in brands]
+
+def get_cars_by_brand(brand_name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Приводим как бренд, так и параметр бренда к нижнему регистру
+    cursor.execute("SELECT * FROM cars WHERE LOWER(brand) = LOWER(?)", (brand_name,))
+    cars = cursor.fetchall()
+    conn.close()
+    return cars
 def update_car(car_id: int, car: Car):
     """Обновление информации о машине."""
     conn = get_connection()

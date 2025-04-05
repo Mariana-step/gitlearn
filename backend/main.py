@@ -91,6 +91,18 @@ def get_car(car_id: int):
         raise HTTPException(status_code=404, detail="Машина не найдена")
     return dict(car)
 
+@app.get("/brands")
+async def get_brands_list():
+    # Получаем список брендов
+    brands = crud.get_brands()
+    return [{"name": brand} for brand in brands]
+
+@app.get("/brands/{brand_name}/cars")
+async def get_cars_for_brand(brand_name: str):
+    # Получаем автомобили для выбранного бренда
+    cars = crud.get_cars_by_brand(brand_name)
+    return [{"id": car[0], "brand": car[1], "model": car[2], "year": car[3], "price": car[7]} for car in cars]
+
 
 @app.put("/cars/{car_id}")
 def update_car(car_id: int, car: models.Car):
