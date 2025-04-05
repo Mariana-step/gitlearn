@@ -1,17 +1,18 @@
-// src/App.js
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import BrandPage from "./pages/BrandPage";
-import CarDetails from "./pages/CarDetails";
-
-const App = () => (
-  <Router>
-    <Routes>
-      <Route path="/brands" element={<Home />} />
-      <Route path="/brand/:brandName" element={<BrandPage />} />
-      <Route path="/car/:carId" element={<CarDetails />} />
-    </Routes>
-  </Router>
-);
+import BrandCars from "./pages/BrandCars";
+import CarDetail from "./pages/CarDetails";
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/brands/:brand_name/cars" element={<BrandCars />} />
+        <Route path="/cars/:car_id" element={<CarDetail />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
