@@ -3,11 +3,17 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import BrandCars from "./pages/BrandCars";
 import CarDetail from "./pages/CarDetails";
+import CarsList from "./pages/CarList";
+import Navbar from "./components/Navbar";
+
 const App = () => {
   return (
     <Router>
+      <Navbar />
       <Routes>
+        
         <Route path="/" element={<Home />} />
+        <Route path="/cars" element={<CarsList />} />
         <Route path="/brands/:brand_name/cars" element={<BrandCars />} />
         <Route path="/cars/:car_id" element={<CarDetail />} />
       </Routes>

@@ -2,46 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-const Home = () => {
-  const [brands, setBrands] = useState([]);
-  const [cars, setCars] = useState([]); // Состояние для автомобилей
+const CarsList = () => {
+  const [cars, setCars] = useState([]); // Состояние для хранения автомобилей
 
-  // Загрузка списка брендов
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/brands")
-      .then((response) => response.json())
-      .then((data) => setBrands(data))
-      .catch((error) => console.error("Error fetching brands:", error));
-  }, []);
-
-  // Загрузка списка автомобилей
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/cars")
+    // Запрос на получение всех автомобилей
+    fetch("http://127.0.0.1:8000/cars/")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched cars:", data); // Проверяем, что мы получаем
-        // Если структура данных такая, как ты показывал, нужно обратиться к data.cars
+        console.log("Fetched cars:", data); // Для проверки данных
+        // Проверяем, что получаем массив автомобилей
         if (data && Array.isArray(data.cars)) {
-          setCars(data.cars); // Устанавливаем массив автомобилей в состояние
+          setCars(data.cars); // Если данные корректны, сохраняем их в состояние
         } else {
-          console.error("Data structure is not as expected.");
+          console.error("Expected data format not received.");
         }
       })
-      .catch((error) => console.error("Error fetching cars:", error));
+      .catch((error) => {
+        console.error("Error fetching cars:", error); // Обработка ошибок
+      });
   }, []);
-
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-center text-2xl font-bold mb-4">Наши Автомобили</h1>
+      <h1 className="text-2xl font-bold mb-4">Все автомобили</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {cars.length > 0 ? (
           cars.map((car) => (
             <div key={car.id} className="bg-white rounded-lg shadow-md p-4">
-              {/* Проверяем, есть ли image1 и если нет, показываем заглушку */}
+              {/* Проверяем наличие первой картинки */}
               {car.image1 ? (
                 <img
-                  src={`http://127.0.0.1:8000/${car.image1}`} // Первая картинка автомобиля
+                  src={`http://127.0.0.1:8000/${car.image1}`} // Путь до первой картинки
                   alt={car.model}
                   className="w-full h-56 object-cover mb-4"
                 />
@@ -69,4 +62,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CarsList;
