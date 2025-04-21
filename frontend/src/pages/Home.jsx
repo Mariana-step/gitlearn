@@ -41,7 +41,7 @@ const Home = () => {
                 <img
                   src={`http://127.0.0.1:8000/${car.image1}`}
                   alt={car.model}
-                  className="w-full h-[800px] object-cover rounded-2xl shadow-xl"
+                  className="w-full h-[500px] object-cover rounded-2xl shadow-xl"
                 />
               </div>
             ) : null
