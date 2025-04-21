@@ -5,6 +5,8 @@ import BrandCars from "./pages/BrandCars";
 import CarDetail from "./pages/CarDetails";
 import CarsList from "./pages/CarList";
 import Navbar from "./components/Navbar";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
   return (

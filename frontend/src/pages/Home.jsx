@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
 import Navbar from "../components/Navbar";
 
 const Home = () => {
-  const [brands, setBrands] = useState([]);
-  const [cars, setCars] = useState([]); // Состояние для автомобилей
+  const [cars, setCars] = useState([]);
+  const navigate = useNavigate();
 
-  // Загрузка списка брендов
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/brands")
-      .then((response) => response.json())
-      .then((data) => setBrands(data))
-      .catch((error) => console.error("Error fetching brands:", error));
-  }, []);
-
-  // Загрузка списка автомобилей
   useEffect(() => {
     fetch("http://127.0.0.1:8000/cars")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched cars:", data); // Проверяем, что мы получаем
-        // Если структура данных такая, как ты показывал, нужно обратиться к data.cars
         if (data && Array.isArray(data.cars)) {
-          setCars(data.cars); // Устанавливаем массив автомобилей в состояние
+          setCars(data.cars);
         } else {
           console.error("Data structure is not as expected.");
         }
@@ -30,40 +20,48 @@ const Home = () => {
       .catch((error) => console.error("Error fetching cars:", error));
   }, []);
 
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-center text-2xl font-bold mb-4">Наши Автомобили</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {cars.length > 0 ? (
-          cars.map((car) => (
-            <div key={car.id} className="bg-white rounded-lg shadow-md p-4">
-              {/* Проверяем, есть ли image1 и если нет, показываем заглушку */}
-              {car.image1 ? (
+      <div className="mb-10">
+        <Slider {...sliderSettings}>
+          {cars.map((car) =>
+            car.image1 ? (
+              <div key={car.id}>
                 <img
-                  src={`http://127.0.0.1:8000/${car.image1}`} // Первая картинка автомобиля
+                  src={`http://127.0.0.1:8000/${car.image1}`}
                   alt={car.model}
-                  className="w-full h-56 object-cover mb-4"
+                  className="w-full h-[800px] object-cover rounded-2xl shadow-xl"
                 />
-              ) : (
-                <div className="w-full h-56 bg-gray-300 flex items-center justify-center text-gray-600">
-                  Нет изображения
-                </div>
-              )}
+              </div>
+            ) : null
+          )}
+        </Slider>
+      </div>
 
-              <h3 className="text-lg font-semibold">{car.model}</h3>
-              <p className="text-gray-600">Цена: ${car.price}</p>
-              <Link
-                to={`/cars/${car.id}`}
-                className="mt-2 text-blue-500 hover:underline"
-              >
-                Подробнее
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p>Автомобили не найдены.</p>
-        )}
+      <div className="flex justify-center gap-8 mb-8">
+        <button
+          onClick={() => navigate("/cars")}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white text-lg px-6 py-3 rounded-full shadow-md hover:scale-105 transform transition"
+        >
+          Все авто
+        </button>
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-gradient-to-r from-green-500 to-green-700 text-white text-lg px-6 py-3 rounded-full shadow-md hover:scale-105 transform "
+        >
+          Назад
+        </button>
       </div>
     </div>
   );
